@@ -16,6 +16,12 @@ def teardown_storage(x):
     storage.close()
 
 
+@app.errorhandler(404)
+def error_handler(error):
+    """ Error Handler """
+    return make_response(jsonify({'error': 'Not found'}), 404)
+
+
 if __name__ == "__main__":
     host = environ.get('HBNB_API_HOST')
     port = environ.get('HBNB_API_PORT')
