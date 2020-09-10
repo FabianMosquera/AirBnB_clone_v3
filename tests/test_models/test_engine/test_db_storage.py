@@ -87,20 +87,19 @@ class TestFileStorage(unittest.TestCase):
     def test_save(self):
         """Test that save properly saves objects to file.json"""
 
-    def test_db_storage_get(self):
-        """ test get """
-        DBStorage().reload()
-        sta_name = State(name='Alabama')
-        DBStorage().new(sta_name)
-        DBStorage().save()
-        result_get = DBStorage().get(State, sta_name.id)
-        self.assertEqual(type(result_get), State)
+    @unittest.skipIf(models.storage_t == 'db', "not testing db storage")
+    def test_get(self):
+        """Test that get method for file_storage"""
+        state = State(name="Cauca")
+        models.storage.new(state)
+        models.storage.save()
+        self.assertEqual(models.storage.get(State, state.id).id, state.id)
+        models.storage.delete(state)
+        models.storage.save()
 
-    def test_db_storage_count(self):
-        """ test count """
-        DBStorage().reload()
-        cont = DBStorage().count()
-        sta_name = State(name='Alabama')
-        DBStorage().new(sta_name)
-        DBStorage().save()
-        self.assertEqual(cont + 1, DBStorage().count())
+    @unittest.skipIf(models.storage_t == 'db', "not testing file storage")
+    def test_count(self):
+        """Test count method"""
+        count1 = models.storage.count(State)
+        count_all_1 = models.storage.count()
+        state = State(name="Cauca")
