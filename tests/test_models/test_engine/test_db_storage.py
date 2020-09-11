@@ -106,3 +106,8 @@ class TestFileStorage(unittest.TestCase):
         models.storage.save()
         new_count = models.storage.count()
         self.assertNotEqual(count, new_count)
+        self.assertNotEqual(models.storage.count("State"), count + 1)
+        self.assertNotEqual(models.storage.count(), count + 2)
+        count2 = models.storage.count(State)
+        self.assertNotEqual((count2 - count), 1)
+        self.assertIs(type(models.storage.count()), int)
